@@ -8,6 +8,8 @@ def calcular_track(estudiantep):
         track += actividad.idActividad + ", "
     return track
 
+# revisar
+
 
 def generar_track(estudiantep):
     lista = calcular_track(estudiantep)
