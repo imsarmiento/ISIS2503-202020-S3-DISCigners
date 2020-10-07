@@ -1,13 +1,14 @@
 from django.db import models
-from manejador_contenido.models import Proveedor
-
+#from django.apps import apps
+#Proveedor = apps.get_model('manejador_contenido', 'Proveedor')
+#import manejador_contenido.models as Contenido
 # Modelo de Universidad
 
 
 class Universidad(models.Model):
     nombre = models.CharField(max_length=50)
     pais = models.CharField(max_length=50)
-    proveedores = models.ManyToManyField(Proveedor)
+    #proveedores = models.ManyToManyField(Contenido.Proveedor)
 
 
 # Modelo de Usuario
