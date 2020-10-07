@@ -1,4 +1,5 @@
 from django.db import models
+from manejador_contenido.models import Proveedor
 
 # Modelo de Universidad
 
@@ -6,6 +7,7 @@ from django.db import models
 class Universidad(models.Model):
     nombre = models.CharField(max_length=50)
     pais = models.CharField(max_length=50)
+    proveedores = models.ManyToManyField(Proveedor)
 
 
 # Modelo de Usuario
