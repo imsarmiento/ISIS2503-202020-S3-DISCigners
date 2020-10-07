@@ -80,9 +80,38 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'default': {},
+    'estadisticas': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'estadisticas_db',
+        'USER': 'admin',
+        'PASSWORD': 'DISCigners2020',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'usuarios': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'usuarios_db',
+        'USER': 'admin',
+        'PASSWORD': 'DISCigners2020',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'busquedas': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'busquedas_db',
+        'USER': 'admin',
+        'PASSWORD': 'DISCigners2020',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'contenido': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'contenido_db',
+        'USER': 'admin',
+        'PASSWORD': 'DISCigners2020',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
