@@ -4,7 +4,7 @@ class ContenidoRouter:
         Lee de la base de datos contenido
         """
         if model._meta.app_label is 'manejador_contenido':
-            return 'contenido_db'
+            return 'contenido'
         return None
 
     def db_for_write(self, model, **hints):
@@ -12,7 +12,7 @@ class ContenidoRouter:
         Escribe la base de datos contenido
         """
         if model._meta.app_label is 'manejador_contenido':
-            return 'contenido_db'
+            return 'contenido'
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
@@ -23,13 +23,13 @@ class ContenidoRouter:
             obj1._meta.app_label is 'manejador_contenido' or
             obj2._meta.app_label is 'manejador_contenido'
         ):
-           return True
+            return True
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         """
         Permite migraciones de contenido
         """
-        if model._meta.app_label is 'manejador_contenido':
-            return db is 'contenido_db'
+        if app_label is 'manejador_contenido':
+            return db is 'contenido'
         return None

@@ -26,13 +26,13 @@ class EstadisticasRouter:
         Allow relations if a model in the manejador usuarios apps is
         involved.
         """
-        # if (
-        #     obj1._meta.app_label in self.route_app_labels or
-        #     obj2._meta.app_label in self.route_app_labels
-        # ):
-        #     return True
-        # return None
-        return True
+        if (
+            obj1._meta.app_label in self.route_app_labels or
+            obj2._meta.app_label in self.route_app_labels
+        ):
+            return True
+        return None
+        # return True
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         """

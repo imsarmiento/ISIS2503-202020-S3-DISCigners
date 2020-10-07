@@ -81,6 +81,14 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 
 DATABASES = {
     'default': {},
+    # {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'estadisticas_db',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'DISCigners2020',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # },
     'estadisticas': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'estadisticas_db',
@@ -115,6 +123,8 @@ DATABASES = {
     }
 }
 
+DATABASE_ROUTERS = ['.db_routers.estadisticas_router.EstadisticasRouter', '.db_routers.usuarios_router.UsuariosRouter',
+                    '.db_routers.busquedas_router.BusquedasRouter', '.db_routers.contenido_router.ContenidoRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
