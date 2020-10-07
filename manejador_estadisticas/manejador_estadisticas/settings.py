@@ -80,16 +80,7 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {},
-    # {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'estadisticas_db',
-    #     'USER': 'admin',
-    #     'PASSWORD': 'DISCigners2020',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
-    # },
-    'estadisticas': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'estadisticas_db',
         'USER': 'admin',
@@ -97,34 +88,42 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     },
-    'usuarios': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'usuarios_db',
-        'USER': 'admin',
-        'PASSWORD': 'DISCigners2020',
-        'HOST': 'localhost',
-        'PORT': '',
-    },
-    'busquedas': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'busquedas_db',
-        'USER': 'admin',
-        'PASSWORD': 'DISCigners2020',
-        'HOST': 'localhost',
-        'PORT': '',
-    },
-    'contenido': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'contenido_db',
-        'USER': 'admin',
-        'PASSWORD': 'DISCigners2020',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    # 'estadisticas': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'estadisticas_db',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'DISCigners2020',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # },
+    # 'usuarios': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'usuarios_db',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'DISCigners2020',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # },
+    # 'busquedas': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'busquedas_db',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'DISCigners2020',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # },
+    # 'contenido': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'contenido_db',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'DISCigners2020',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # }
 }
 
-DATABASE_ROUTERS = ['.db_routers.estadisticas_router.EstadisticasRouter', '.db_routers.usuarios_router.UsuariosRouter',
-                    '.db_routers.busquedas_router.BusquedasRouter', '.db_routers.contenido_router.ContenidoRouter']
+# DATABASE_ROUTERS = ['.db_routers.estadisticas_router.EstadisticasRouter', '.db_routers.usuarios_router.UsuariosRouter',
+#                     '.db_routers.busquedas_router.BusquedasRouter', '.db_routers.contenido_router.ContenidoRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

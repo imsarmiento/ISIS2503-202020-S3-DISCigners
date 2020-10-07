@@ -10,6 +10,9 @@ class Universidad(models.Model):
     pais = models.CharField(max_length=50)
     #proveedores = models.ManyToManyField(Contenido.Proveedor)
 
+    def _str_(self):
+        return '%s' % (self.nombre)
+
 
 # Modelo de Usuario
 # Clase abstracta
