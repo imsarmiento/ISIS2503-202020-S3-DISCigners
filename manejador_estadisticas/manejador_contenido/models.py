@@ -36,3 +36,6 @@ class Booklist(models.Model):
     contenedor = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.SET_NULL)
     contenidos = models.ManyToManyField(Contenido)
+    
+    def get_creador(self):
+        return creador;

@@ -26,8 +26,8 @@ class Usuario(models.Model):
 
     class Meta:
         abstract = True
-
-    def _str_(self):
+    
+    def __str__(self):
         return '%s %s' % (self.nombre, self.apellido)
 
 
@@ -37,4 +37,9 @@ class Usuario(models.Model):
 
 class Estudiante(Usuario):
     carrera = models.CharField(max_length=50)
-    codigo = models.IntegerField()
+    codigo = models.IntegerField(primary_key=True)
+    
+    def get_carrera(self):
+        return self.carrera
+    def get_codigo(self):
+        return self.codigo
