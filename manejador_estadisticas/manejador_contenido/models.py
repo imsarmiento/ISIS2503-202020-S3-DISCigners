@@ -23,6 +23,7 @@ class Proveedor(models.Model):
 
 # Modelo de Contenido
 
+
 class Contenido(models.Model):
     titulo = models.CharField(max_length=50, primary_key=True)
     autor = models.CharField(max_length=200)
