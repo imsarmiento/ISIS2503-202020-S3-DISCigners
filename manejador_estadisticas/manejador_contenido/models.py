@@ -39,3 +39,6 @@ class Booklist(models.Model):
     
     def get_creador(self):
         return creador;
+
+    def get_numContenido(self):
+        return contenidos.count()
