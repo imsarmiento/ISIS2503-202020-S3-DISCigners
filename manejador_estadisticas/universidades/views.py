@@ -68,7 +68,8 @@ def get_basesDatos_carrera(request):
 
         writer.writerow(['Carrera', carrera])
 
-        proveedores = get_proveedores_por_carrerra(carrera, 'Uniandes')
+        proveedores = get_proveedores_por_carrerra(
+            carrera, 'Uniandes', '2020-01-01', '2021-10-10')
         lista_carrera = {}
         for proveedor_dict in proveedores:
             proveedor = proveedor_dict['nombre']
@@ -76,10 +77,10 @@ def get_basesDatos_carrera(request):
                 lista_carrera.update({proveedor: 1})
             else:
                 lista_carrera[proveedor] += 1
-        # print(lista_carrera)
+        print(lista_carrera)
         sort_proveedores = sorted(
             lista_carrera.items(), key=lambda x: x[1], reverse=True)
-        # print(sort_proveedores)
+        print(sort_proveedores)
         for proveedor in sort_proveedores:
             writer.writerow(proveedor)
 

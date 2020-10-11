@@ -11,7 +11,7 @@ def get_Consultas():
     return consultas
 
 
-def get_proveedores_por_carrerra(p_carrera, p_universidad):
+def get_proveedores_por_carrerra(p_carrera, p_universidad, fechaInicio, fechaFin):
 
     # consultas = Proveedor.objects.filter(
     #     contenido__consulta__estudiante__carrera='Ingeniería de Sistemas')
@@ -19,7 +19,7 @@ def get_proveedores_por_carrerra(p_carrera, p_universidad):
     #    consulta__contenido__proveedor_id__nombre='IEEE')
     #consultas = Estudiante.objects.values('carrera').filter(consulta__contenido__proveedor_id__nombre='IEEE')
     proveedores = Proveedor.objects.values('nombre').filter(
-        contenido__consulta__estudiante__carrera=p_carrera, contenido__consulta__estudiante__universidad__nombre=p_universidad)
+        contenido__consulta__estudiante__carrera=p_carrera, contenido__consulta__estudiante__universidad__nombre=p_universidad, contenido__consulta__fecha__range=[fechaInicio, fechaFin])
 
     print(proveedores)
     return proveedores
