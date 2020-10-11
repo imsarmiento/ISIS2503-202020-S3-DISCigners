@@ -13,4 +13,6 @@ class Consulta(models.Model):
         Contenidos.Contenido, on_delete=models.CASCADE)
     fecha = models.DateTimeField(default=datetime.now, blank=True)
 
+    def get_estudiante(self):
+        return self.estudiante.get_id()
 # Create your models here.

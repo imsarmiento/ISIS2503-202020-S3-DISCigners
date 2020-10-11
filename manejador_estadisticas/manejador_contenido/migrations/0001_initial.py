@@ -14,21 +14,21 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Contenido',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titulo', models.CharField(max_length=50)),
-                ('autor', models.CharField(max_length=200)),
-                ('descripcion', models.TextField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='Proveedor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=50)),
                 ('tipo_conexion', models.CharField(choices=[('AP', 'Api'), ('MD', 'Metadatos'), ('CR', 'Correo')], max_length=2)),
                 ('universidaddes', models.ManyToManyField(to='manejador_usuarios.Universidad')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Contenido',
+            fields=[
+                ('titulo', models.CharField(max_length=50, primary_key=True, serialize=False)),
+                ('autor', models.CharField(max_length=200)),
+                ('descripcion', models.TextField()),
+                ('proveedor_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='manejador_contenido.proveedor')),
             ],
         ),
         migrations.CreateModel(
