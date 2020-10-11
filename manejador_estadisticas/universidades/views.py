@@ -45,17 +45,22 @@ def get_basesDatos(request):
 
 """
 Genera archivo con estadisticas sobre el número de consultas a una base de datos por carrera
+Necesita la universidad y las fechas en las que se quiere incluir el reporte
+Ej. http://localhost:8000/universidades/basesDatos_carreras/Uniandes/2020-01-01/2021-10-10
 """
 
 
-def get_basesDatos_carrera(request):
+def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
 
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
+    writer.writerow(['Universidad', universidad])
+    writer.writerow(['Fechas', fechaInicio + " / " + fechaFin])
+
     writer.writerow(['Proveedor', 'NumeroConsultas'])
 
-    carreras_tot = get_carreras_universidad('Uniandes')
+    carreras_tot = get_carreras_universidad(universidad)
     carreras = [carreras_tot[0]['carrera']]
     for i in range(len(carreras_tot)-1):
         carrera_act = carreras_tot[i+1]
@@ -69,7 +74,7 @@ def get_basesDatos_carrera(request):
         writer.writerow(['Carrera', carrera])
 
         proveedores = get_proveedores_por_carrerra(
-            carrera, 'Uniandes', '2020-01-01', '2021-10-10')
+            carrera, universidad, fechaInicio, fechaFin)
         lista_carrera = {}
         for proveedor_dict in proveedores:
             proveedor = proveedor_dict['nombre']
