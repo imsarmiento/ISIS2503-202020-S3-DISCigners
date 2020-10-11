@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .logic.consultaDB import get_Consultas
-from .logic.consultaDB import get_consultas_proveedor
+from .logic.consultaDB import get_Consultas, get_proveedores_por_carrerra, get_carreras_universidad
 from manejador_contenido.models import Contenido
 from manejador_contenido.logic.logic_contenido import get_contenido
 from manejador_usuarios.logic.logic_usuarios import get_estudiantes
@@ -44,24 +43,48 @@ def get_basesDatos(request):
     return response
 
 
-def get_basesDatos_carrera(request):
-    consultas = get_Consultas()
-    #consulta_list = serializers.serialize('json', consultas)
-    cotenidoTot = get_contenido()
-    estudiantes = get_estudiantes()
-    arreglo = []
-    for consulta in consultas:
-        proveedor = ''
-        for contenido in cotenidoTot:
-            if contenido.get_Titulo() == consulta[1]:
-                proveedor = contenido.get_proveedor()
-                break
-        for estudiante in estudiantes:
-            if estudiante.get_id() == consulta[2]:
-                estudiante = consulta.get_estudiante()
-                carrera = estudiante.get_carrera()
-                break
-        pareja = [proveedor, carrera]
-        arreglo.append(pareja)
+"""
+Genera archivo con estadisticas sobre el número de consultas a una base de datos por carrera
+"""
 
-    return HttpResponse(consulta_list, content_type='application/json')
+
+def get_basesDatos_carrera(request):
+
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+    writer.writerow(['Proveedor', 'NumeroConsultas'])
+
+    carreras_tot = get_carreras_universidad('Uniandes')
+    carreras = [carreras_tot[0]['carrera']]
+    for i in range(len(carreras_tot)-1):
+        carrera_act = carreras_tot[i+1]
+        carrera_ant = carreras_tot[i]
+        if(carrera_act != carrera_ant):
+            carreras.append(carrera_act['carrera'])
+    # print(carreras)
+    estadisticas = []
+    for carrera in carreras:
+
+        writer.writerow(['Carrera', carrera])
+
+        proveedores = get_proveedores_por_carrerra(carrera, 'Uniandes')
+        lista_carrera = {}
+        for proveedor_dict in proveedores:
+            proveedor = proveedor_dict['nombre']
+            if not lista_carrera.get(proveedor, False):
+                lista_carrera.update({proveedor: 1})
+            else:
+                lista_carrera[proveedor] += 1
+        # print(lista_carrera)
+        sort_proveedores = sorted(
+            lista_carrera.items(), key=lambda x: x[1], reverse=True)
+        # print(sort_proveedores)
+        for proveedor in sort_proveedores:
+            writer.writerow(proveedor)
+
+        writer.writerow(['', ''])
+
+    response['Content-Disposition'] = 'attachment; filename="DB_Consultadas_Por_Carrera.csv"'
+
+    return response
