@@ -85,8 +85,8 @@ DATABASES = {
         'NAME': 'estadisticas_db',
         'USER': 'admin',
         'PASSWORD': 'DISCigners2020',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': '172.24.42.72',
+        'PORT': '5432',
     },
     # 'estadisticas': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
