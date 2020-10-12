@@ -33,7 +33,8 @@ def get_basesDatos(request):
         actual = diferentes[i] + ',' + str(frecuencia[i])
         lista.append(tuple(map(str, actual.split(','))))
         i += 1
-    nuevaLista = sorted(lista, key=lambda x: x[1], reverse=True)
+    #nuevaLista = sorted(lista, key=lambda x: x[1], reverse=True)
+    nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
 
     for tupla in nuevaLista:
         writer.writerow(tupla)
