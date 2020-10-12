@@ -20,6 +20,9 @@ class Proveedor(models.Model):
 
     def get_nombre(self):
         return self.nombre
+    
+    def __str__(self):
+        return '%s' % (self.nombre)
 
 # Modelo de Contenido
 
@@ -35,6 +38,9 @@ class Contenido(models.Model):
 
     def get_proveedor(self):
         return self.proveedor_id.get_nombre()
+    
+    def __str__(self):
+        return '%s' % (self.titulo)
 
 # Modelo Booklist
 
@@ -42,9 +48,12 @@ class Contenido(models.Model):
 class Booklist(models.Model):
     titulo = models.CharField(max_length=50)
     creador = models.ForeignKey(Usuarios.Estudiante, on_delete=models.CASCADE)
-    contenedor = models.ForeignKey(
-        'self', blank=True, null=True, on_delete=models.SET_NULL)
-    contenidos = models.ManyToManyField(Contenido)
+    booklistsContenidos = models.ManyToManyField(
+        'self', blank=True)
+    contenidos = models.ManyToManyField(Contenido, blank = True)
     
     def get_creador(self):
         return creador;
+    
+    def __str__(self):
+        return '%s' % (self.titulo)
