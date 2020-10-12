@@ -49,3 +49,35 @@ def get_booklists (request):
     return response
 
 # Create your views here.
+
+
+def get_booklists_contenidoPromedio (request):
+    
+    booklists = get_all_booklists()
+    #response = HttpResponse(content_type='text/csv')
+    
+   # writer = csv.writer(response)
+     
+   # writer.writerow('Promedio contenido Booklist:')
+ 
+    contador = 0
+    total = 0
+    num = 0
+
+    for booklist in booklists:
+        num = booklist.contenidos.all().count()
+        total = total + num       
+        contador = contador + 1
+    
+    promedio = total/contador
+
+   # writer.writerow(promedio)
+#         
+    #response['Content-Disposition']= 'attachment; filename="booklistsPromedioContenido.csv"'
+# 
+    respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
+
+    return HttpResponse(respuesta)
+
+# Create your views here.
+
