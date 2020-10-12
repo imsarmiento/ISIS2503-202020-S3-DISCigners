@@ -46,7 +46,7 @@ def get_basesDatos(request):
 """
 Genera archivo con estadisticas sobre el número de consultas a una base de datos por carrera
 Necesita la universidad y las fechas en las que se quiere incluir el reporte
-Ej. http://localhost:8000/universidades/basesDatos_carreras/Uniandes/2020-01-01/2021-10-10
+Ej. http://localhost:8000/universidades/basesDatos_carreras/Universidad%20de%20los%20Andes/2020-01-01/2021-10-10
 """
 
 
@@ -82,10 +82,10 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
                 lista_carrera.update({proveedor: 1})
             else:
                 lista_carrera[proveedor] += 1
-        print(lista_carrera)
+        # print(lista_carrera)
         sort_proveedores = sorted(
             lista_carrera.items(), key=lambda x: x[1], reverse=True)
-        print(sort_proveedores)
+        # print(sort_proveedores)
         for proveedor in sort_proveedores:
             writer.writerow(proveedor)
 
