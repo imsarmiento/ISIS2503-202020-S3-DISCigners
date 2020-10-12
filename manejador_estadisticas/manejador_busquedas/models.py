@@ -15,4 +15,7 @@ class Consulta(models.Model):
 
     def get_estudiante(self):
         return self.estudiante.get_id()
+    
+    def __str__(self):
+        return '%s %s %s' % (self.estudiante, self.contenido, self.fecha)
 # Create your models here.
