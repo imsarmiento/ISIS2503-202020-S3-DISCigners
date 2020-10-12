@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'estadisticas_db',
+        'NAME': 'dbdaniela',
         'USER': 'admin',
-        'PASSWORD': 'DISCigners2020',
+        'PASSWORD': 'DISCigners',
         'HOST': 'localhost',
         'PORT': '',
     },
