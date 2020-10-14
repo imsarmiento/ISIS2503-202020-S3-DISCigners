@@ -11,9 +11,9 @@ import csv
 
 """
 Genera archivo con las bases de datos más consultadas (numConsultas)
-Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/10/2020-01-01/2021-10-10
+Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/2020-01-01/2021-10-10
 """
-def get_basesDatos(request, universidad, numConsulta, fechaInicio, fechaFin):
+def get_basesDatos(request, universidad, fechaInicio, fechaFin):
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
@@ -36,16 +36,14 @@ def get_basesDatos(request, universidad, numConsulta, fechaInicio, fechaFin):
     i = 0
     lista = []
     while i < len(diferentes):
-        actual = diferentes[i] + ',' + str(frecuencia[i])
-        lista.append(tuple(map(str, actual.split(','))))
+        actual = diferentes[i] + ';' + str(frecuencia[i])
+        lista.append(tuple(map(str, actual.split(';'))))
         i += 1
     #nuevaLista = sorted(lista, key=lambda x: x[1], reverse=True)
     nuevaLista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
 
-    i = 0
-    while i < len(nuevaLista) and i <numConsulta:
+    for tupla in nuevaLista:
         writer.writerow(tupla)
-        i += 1
 
     response['Content-Disposition'] = 'attachment; filename="DB_Consultadas.csv"'
 
