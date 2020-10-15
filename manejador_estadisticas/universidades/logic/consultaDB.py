@@ -15,9 +15,9 @@ def get_consultas_universidad(p_universidad, fechaInicio, fechaFin):
 
 def get_proveedores_por_carrerra(p_carrera, p_universidad, fechaInicio, fechaFin):
     proveedores = Proveedor.objects.values('nombre').filter(
-        contenido__consulta__estudiante__carrera=p_carrera, contenido__consulta__estudiante__universidad__nombre=p_universidad, contenido__consulta__fecha__range=[fechaInicio, fechaFin])
-
+        contenido__consulta__estudiante__carrera=p_carrera, contenido__consulta__estudiante__universidad__nombre=p_universidad, contenido__consulta__fecha__range=[fechaInicio, fechaFin]).annotate(count=Count('nombre')).order_by('-count')
     # print(proveedores)
+
     return proveedores
 
 
@@ -25,5 +25,4 @@ def get_carreras_universidad(p_universidad):
     carreras = Estudiante.objects.values('carrera').filter(
         universidad__nombre=p_universidad).distinct()
     # print("carreras")
-    # print(carreras)
     return carreras
