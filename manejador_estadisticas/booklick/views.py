@@ -4,6 +4,7 @@ from manejador_contenido.models import Booklist
 from manejador_usuarios.models import Estudiante
 from django.core import serializers
 import csv
+import time
 
 from .logic.booklists_carrera import get_all_booklists
 from email._header_value_parser import ContentDisposition
@@ -22,7 +23,14 @@ def get_booklists(request):
     arreglo = []
     frecuencua = []
     diferentes = []
-    for booklist in booklists.values_list('titulo', 'creador', 'booklistsContenidos', 'contenidos'):
+    start = time.time()
+    booklists = booklists.values_list(
+        'titulo', 'creador', 'booklistsContenidos', 'contenidos')
+    now = time.time()
+    consulta = now-start
+
+    start = time.time()
+    for booklist in booklists:
         carrera = ''
         for estudiante in Estudiante.objects.all():
             if estudiante.get_codigo() == booklist[1]:
@@ -40,6 +48,11 @@ def get_booklists(request):
         i += 1
     #nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
     nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
+    now = time.time()
+    calculos = now-start
+
+    print('Consulta: '+str(consulta))
+    print('Calculos: '+str(calculos))
 
     for tupla in nuevalista:
         writer.writerow(tupla)
