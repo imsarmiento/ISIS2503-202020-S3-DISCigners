@@ -6,7 +6,7 @@ from django.core import serializers
 import csv
 import time
 
-from .logic.booklick_logic import get_valores_estadistica, get_estadistica_reciente, get_estudiantes_por_carrerra, get_carreras, get_booklists_estudiante
+from .logic.booklick_logic import get_valores_estadistica, get_estadistica_reciente,get_estudiantes_por_carrerra,get_carreras,get_booklists_estudiante
 
 from .logic.booklists_carrera import get_all_booklists
 from email._header_value_parser import ContentDisposition
@@ -16,16 +16,17 @@ from . models import Estadistica, Valor, Tipo_estadistica
 
 def get_booklists_carrera(request):
     carreras = get_carreras()
-
+    
     response = HttpResponse(content_type='text/csv')
-
+    
     writer = csv.writer(response)
-
+     
     writer.writerow(['Carrera', 'NumBooklists'])
 
-    booklistscarrera = []
-    total = 0
 
+    booklistscarrera = [] 
+    total = 0
+    
     for carrera in carreras:
         booklists = 0
         carrera_act = carrera['carrera']
@@ -33,16 +34,67 @@ def get_booklists_carrera(request):
         for estudiante in estudiantes:
             est_act = estudiante['codigo']
             booklists += get_booklists_estudiante(est_act)
-        booklistscarrera.append((carrera_act, booklists))
+        booklistscarrera.append((carrera_act,booklists))
         total += booklists
-    nuevalista = sorted(
-        booklistscarrera, key=lambda x: int(x[1]), reverse=True)
+    nuevalista=sorted(booklistscarrera,key=lambda x:int(x[1]),reverse=True)
     for tupla in nuevalista:
         writer.writerow(tupla)
     writer.writerow(['TOTAL', total])
 
     response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
+    return response
+
+
+def get_booklists(request):
+
+    booklists = get_all_booklists()
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+
+    writer.writerow(['Carrera', 'NumBooklists'])
+
+    arreglo = []
+    frecuencua = []
+    diferentes = []
+    start = time.time()
+    booklists = booklists.values_list(
+        'titulo', 'creador', 'booklistsContenidos', 'contenidos')
+    # now = time.time()
+    # consulta = now-start
+
+    # start = time.time()
+    for booklist in booklists:
+        carrera = ''
+        for estudiante in Estudiante.objects.all():
+            if estudiante.get_codigo() == booklist[1]:
+                carrera = estudiante.get_carrera()
+
+        arreglo.append(carrera)
+    diferentes = list(Counter(arreglo).keys())
+    frecuencia = list(Counter(arreglo).values())
+
+    i = 0
+    lista = []
+    while i < len(diferentes):
+        actual = diferentes[i]+','+str(frecuencia[i])
+        lista.append(tuple(map(str, actual.split(','))))
+        i += 1
+    # nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
+    nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
+    now = time.time()
+    calculos = now-start
+
+    # print('Consulta: '+str(consulta))
+    # print('Calculos: '+str(calculos))
+
+    for tupla in nuevalista:
+        writer.writerow(tupla)
+#     writer.writerow([booklist[0]+','+carrera])
+#
+    response['Content-Disposition'] = 'attachment; filename="booklistsxarrera.csv"'
+#
     return response
 
 
@@ -140,7 +192,6 @@ def get_booklists_contenidoPromedio_db(request):
 
     return response
 
-
 def post_booklists_rangos_db(request):
     booklists = get_all_booklists()
     cero = 0
@@ -198,3 +249,44 @@ def get_booklists_rangos_db(request):
     writer.writerow([fecha])
     response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
     return response
+
+
+
+def post_booklists_carrera_db(request):
+    
+    carreras = get_carreras()
+    
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_CARRERA)
+
+    for carrera in carreras:
+        booklists = 0
+        carrera_act = carrera['carrera']
+        estudiantes = get_estudiantes_por_carrerra(carrera_act)
+        for estudiante in estudiantes:
+            est_act = estudiante['codigo']
+            booklists += get_booklists_estudiante(est_act)
+        
+        valor = Valor.objects.create(
+        atributo=carrera_act, valor=booklists, estadistica=estadistica)
+        
+    return HttpResponse('Exitoso')
+
+
+def get_booklists_carrera_db(request):
+    
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Carrera', 'NumBooklists'])
+
+    estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_CARRERA)
+    valores = get_valores_estadistica(estadistica.get('id'))
+   
+    for tupla in valores:
+        print(tupla)
+        writer.writerow([tupla])
+
+    response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
+        
+    return response
+
