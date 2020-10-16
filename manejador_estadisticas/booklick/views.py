@@ -65,10 +65,10 @@ def get_booklists(request):
     start = time.time()
     booklists = booklists.values_list(
         'titulo', 'creador', 'booklistsContenidos', 'contenidos')
-    #now = time.time()
-    #consulta = now-start
+    # now = time.time()
+    # consulta = now-start
 
-    #start = time.time()
+    # start = time.time()
     for booklist in booklists:
         carrera = ''
         for estudiante in Estudiante.objects.all():
@@ -85,13 +85,13 @@ def get_booklists(request):
         actual = diferentes[i]+','+str(frecuencia[i])
         lista.append(tuple(map(str, actual.split(','))))
         i += 1
-    #nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
+    # nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
     nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
     now = time.time()
     calculos = now-start
 
-    #print('Consulta: '+str(consulta))
-    #print('Calculos: '+str(calculos))
+    # print('Consulta: '+str(consulta))
+    # print('Calculos: '+str(calculos))
 
     for tupla in nuevalista:
         writer.writerow(tupla)
@@ -128,7 +128,7 @@ def get_booklists_contenidoPromedio(request):
 #
     response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 #
-    #respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
+    # respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
 
     return response
 
@@ -190,11 +190,69 @@ def get_booklists_contenidoPromedio_db(request):
 
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_PROMEDIO)
     valores = get_valores_estadistica(estadistica.get('id'))
-    promedio = str(valores[0]).split()[1]
-
+    promedio = valores[0][1]
     writer.writerow([promedio])
     fecha = 'Estadística calculada en:' + estadistica.get('fecha')
     writer.writerow([fecha])
     response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 
+    return response
+
+
+def post_booklists_rangos_db(request):
+    booklists = get_all_booklists()
+    cero = 0
+    unoatres = 0
+    cincoadiez = 0
+    masdediez = 0
+    for booklist in booklists:
+        tamaño = booklist.contenidos.all().count(
+        ) + booklist.booklistsContenidos.all().count()
+        if tamaño == 0:
+            cero += 1
+        if 1 <= tamaño <= 3:
+            unoatres += 1
+        if 5 <= tamaño <= 10:
+            cincoadiez += 1
+        if tamaño > 10:
+            masdediez += 1
+
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_RANGO)
+    valor = Valor.objects.create(
+        atributo='0', valor=cero, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='1-3', valor=unoatres, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='5-10', valor=cincoadiez, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='Mas de 10', valor=masdediez, estadistica=estadistica)
+    return HttpResponse('Exitoso')
+
+
+def get_booklists_rangos_db(request):
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['0', '1-3', '5-10', 'Mas de 10'])
+    estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_RANGO)
+    valores = get_valores_estadistica(estadistica.get('id'))
+    # print(valores)
+    cero = 0
+    unoatres = 0
+    cincoadiez = 0
+    masdediez = 0
+    for i in range(len(valores)):
+        atributo = valores[i][0]
+        if atributo == '0':
+            cero = valores[i][1]
+        elif atributo == '1-3':
+            unoatres = valores[i][1]
+        elif atributo == '5-10':
+            cincoadiez = valores[i][1]
+        else:
+            masdediez = valores[i][1]
+    writer.writerow([cero, unoatres, cincoadiez, masdediez])
+    fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+    writer.writerow([fecha])
+    response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
     return response
