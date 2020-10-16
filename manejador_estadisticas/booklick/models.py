@@ -22,7 +22,7 @@ class Estadistica(models.Model):
 class Valor(models.Model):
     atributo = models.CharField(max_length=50)
     valor = models.FloatField()
-    estadistica = models.ForeingKey(Estadistica, on_delete=models.CASCADE))
+    estadistica = models.ForeignKey(Estadistica, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s %s' % (self.atributo, self.valor)

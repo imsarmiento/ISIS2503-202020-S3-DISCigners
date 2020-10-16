@@ -6,46 +6,49 @@ from django.core import serializers
 import csv
 import time
 
+from .logic.booklick_logic import get_valores_estadistica, get_estadistica_reciente
 from .logic.booklists_carrera import get_all_booklists
 from email._header_value_parser import ContentDisposition
 from collections import Counter
+from . models import Estadistica, Valor, Tipo_estadistica
+
 
 def get_booklists_carrera(request):
     booklists = get_all_booklists()
     response = HttpResponse(content_type='text/csv')
-    
+
     writer = csv.writer(response)
-     
+
     writer.writerow(['Carrera', 'NumBooklists'])
-     
-     
+
     arreglo = []
     frecuencua = []
     diferentes = []
     for booklist in booklists.values_list('titulo', 'creador', 'booklistsContenidos', 'contenidos'):
-        carrera=''
+        carrera = ''
         for estudiante in Estudiante.objects.all():
             if estudiante.get_codigo() == booklist[1]:
                 carrera = estudiante.get_carrera()
-                
+
         arreglo.append(carrera)
     diferentes = list(Counter(arreglo).keys())
     frecuencia = list(Counter(arreglo).values())
-    
+
     i = 0
     lista = []
     while i < len(diferentes):
-        actual=diferentes[i]+','+str(frecuencia[i])
-        lista.append(tuple(map(str,actual.split(','))))
-        i+=1
-    nuevalista=sorted(lista,key=lambda x:int(x[1]),reverse=True)
-    
+        actual = diferentes[i]+','+str(frecuencia[i])
+        lista.append(tuple(map(str, actual.split(','))))
+        i += 1
+    nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
+
     for tupla in nuevalista:
         writer.writerow(tupla)
 
-    response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
-        
+    response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
+
     return response
+
 
 def get_booklists(request):
 
@@ -62,10 +65,10 @@ def get_booklists(request):
     start = time.time()
     booklists = booklists.values_list(
         'titulo', 'creador', 'booklistsContenidos', 'contenidos')
-    now = time.time()
-    consulta = now-start
+    #now = time.time()
+    #consulta = now-start
 
-    start = time.time()
+    #start = time.time()
     for booklist in booklists:
         carrera = ''
         for estudiante in Estudiante.objects.all():
@@ -87,8 +90,8 @@ def get_booklists(request):
     now = time.time()
     calculos = now-start
 
-    print('Consulta: '+str(consulta))
-    print('Calculos: '+str(calculos))
+    #print('Consulta: '+str(consulta))
+    #print('Calculos: '+str(calculos))
 
     for tupla in nuevalista:
         writer.writerow(tupla)
@@ -99,7 +102,6 @@ def get_booklists(request):
     return response
 
 # Create your views here.
-
 
 
 def get_booklists_contenidoPromedio(request):
@@ -155,4 +157,44 @@ def contar(request):
             masdediez += 1
     writer.writerow([cero, unoatres, cincoadiez, masdediez])
     response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
+    return response
+
+
+def post_booklists_contenidoPromedio_db(request):
+
+    booklists = get_all_booklists()
+    response = HttpResponse(content_type='text/csv')
+    contador = 0
+    total = 0
+    num = 0
+
+    for booklist in booklists:
+        num = booklist.contenidos.all().count()+booklist.booklistsContenidos.all().count()
+        total = total + num
+        contador = contador + 1
+
+    promedio = total/contador
+
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_PROMEDIO)
+    valor = Valor.objects.create(
+        atributo='promedio', valor=promedio, estadistica=estadistica)
+
+    return HttpResponse('Exitoso')
+
+
+def get_booklists_contenidoPromedio_db(request):
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Promedio contenido Booklist:'])
+
+    estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_PROMEDIO)
+    valores = get_valores_estadistica(estadistica.get('id'))
+    promedio = str(valores[0]).split()[1]
+
+    writer.writerow([promedio])
+    fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+    writer.writerow([fecha])
+    response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
+
     return response
