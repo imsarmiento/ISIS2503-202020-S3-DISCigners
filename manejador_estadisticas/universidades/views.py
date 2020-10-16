@@ -7,12 +7,15 @@ from manejador_usuarios.logic.logic_usuarios import get_estudiantes
 from django.core import serializers
 from collections import Counter
 import csv
+import time
 
 
 """
 Genera archivo con las bases de datos más consultadas (numConsultas)
 Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/2020-01-01/2021-10-10
 """
+
+
 def get_basesDatos(request, universidad, fechaInicio, fechaFin):
     response = HttpResponse(content_type='text/csv')
 
@@ -20,7 +23,7 @@ def get_basesDatos(request, universidad, fechaInicio, fechaFin):
     writer.writerow(['Universidad', universidad])
     writer.writerow(['Fechas', fechaInicio + " / " + fechaFin])
     writer.writerow(['Proveedor', 'NumeroConsultas'])
-    
+
     arreglo = []
     frecuencia = []
     diferentes = []
@@ -57,7 +60,10 @@ Ej. http://localhost:8000/universidades/basesDatos_carreras/Universidad%20de%20l
 
 
 def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
-
+    startO = time.time()
+    consulta = 0
+    calculos = 0
+    write = 0
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
@@ -66,21 +72,27 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
 
     writer.writerow(['Proveedor', 'NumeroConsultas'])
 
+    start = time.time()
     carreras_tot = get_carreras_universidad(universidad)
-    carreras = [carreras_tot[0]['carrera']]
-    for i in range(len(carreras_tot)-1):
-        carrera_act = carreras_tot[i+1]
-        carrera_ant = carreras_tot[i]
-        if(carrera_act != carrera_ant):
-            carreras.append(carrera_act['carrera'])
+    now = time.time()
+    consulta += (now-start)
+    start = time.time()
+    carreras = []
+    for i in range(len(carreras_tot)):
+        carrera_act = carreras_tot[i]
+        carreras.append(carrera_act['carrera'])
     # print(carreras)
+    now = time.time()
+    calculos += (now-start)
     estadisticas = []
     for carrera in carreras:
 
         writer.writerow(['Carrera', carrera])
-
+        start = time.time()
         proveedores = get_proveedores_por_carrerra(
             carrera, universidad, fechaInicio, fechaFin)
+        consulta += (now-start)
+        start = time.time()
         lista_carrera = {}
         for proveedor_dict in proveedores:
             proveedor = proveedor_dict['nombre']
@@ -92,11 +104,21 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
         sort_proveedores = sorted(
             lista_carrera.items(), key=lambda x: x[1], reverse=True)
         # print(sort_proveedores)
+        now = time.time()
+        calculos += (now-start)
+        start = time.time()
         for proveedor in sort_proveedores:
             writer.writerow(proveedor)
 
         writer.writerow(['', ''])
+        now = time.time()
+        write += (now-start)
 
     response['Content-Disposition'] = 'attachment; filename="DB_Consultadas_Por_Carrera.csv"'
-
+    endO = time.time()
+    tiempoTot = endO-startO
+    print('Consulta: '+str(consulta))
+    print('Calculos: '+str(calculos))
+    print('Write: '+str(write))
+    print('Tot: '+str(tiempoTot))
     return response
