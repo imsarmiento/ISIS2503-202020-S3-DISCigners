@@ -133,7 +133,7 @@ def contar(request):
     booklists = get_all_booklists()
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
-    writer.writerow(['0', '1-3', '5-10', 'Mas de 10'])
+    writer.writerow(['Contenido Booklists','0', '1-3', '5-10', 'Mas de 10'])
     cero = 0
     unoatres = 0
     cincoadiez = 0
@@ -149,7 +149,7 @@ def contar(request):
             cincoadiez += 1
         if tamaño > 10:
             masdediez += 1
-    writer.writerow([cero, unoatres, cincoadiez, masdediez])
+    writer.writerow(['Cantidad', cero, unoatres, cincoadiez, masdediez])
     response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
     return response
 
@@ -226,7 +226,7 @@ def post_booklists_rangos_db(request):
 def get_booklists_rangos_db(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
-    writer.writerow(['0', '1-3', '5-10', 'Mas de 10'])
+    writer.writerow(['Contenido Booklists','0', '1-3', '5-10', 'Mas de 10'])
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_RANGO)
     valores = get_valores_estadistica(estadistica.get('id'))
     # print(valores)
@@ -244,7 +244,7 @@ def get_booklists_rangos_db(request):
             cincoadiez = valores[i][1]
         else:
             masdediez = valores[i][1]
-    writer.writerow([cero, unoatres, cincoadiez, masdediez])
+    writer.writerow(['Cantidad',cero, unoatres, cincoadiez, masdediez])
     fecha = 'Estadística calculada en:' + estadistica.get('fecha')
     writer.writerow([fecha])
     response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
@@ -283,8 +283,7 @@ def get_booklists_carrera_db(request):
     valores = get_valores_estadistica(estadistica.get('id'))
    
     for tupla in valores:
-        print(tupla)
-        writer.writerow([tupla])
+        writer.writerow(tupla)
 
     response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
         

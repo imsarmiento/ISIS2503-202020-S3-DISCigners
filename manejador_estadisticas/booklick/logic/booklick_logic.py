@@ -7,7 +7,6 @@ from datetime import datetime
 def get_valores_estadistica(p_estadistica):
     valores = Valor.objects.filter(
         estadistica=p_estadistica).values_list('atributo', 'valor')
-    print(valores)
     return valores
 
 
