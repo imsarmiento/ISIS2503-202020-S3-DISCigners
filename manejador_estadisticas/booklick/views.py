@@ -140,3 +140,42 @@ def get_booklists_contenidoPromedio_db(request):
     response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 
     return response
+
+
+def post_booklists_carrera_db(request):
+    
+    carreras = get_carreras()
+    
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_CARRERA)
+
+    for carrera in carreras:
+        booklists = 0
+        carrera_act = carrera['carrera']
+        estudiantes = get_estudiantes_por_carrerra(carrera_act)
+        for estudiante in estudiantes:
+            est_act = estudiante['codigo']
+            booklists += get_booklists_estudiante(est_act)
+        
+        valor = Valor.objects.create(
+        atributo=carrera_act, valor=booklists, estadistica=estadistica)
+        
+    return HttpResponse('Exitoso')
+
+
+def get_booklists_carrera_db(request):
+    
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Carrera', 'NumBooklists'])
+
+    estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_CARRERA)
+    valores = get_valores_estadistica(estadistica.get('id'))
+   
+    for tupla in valores:
+        print(tupla)
+        writer.writerow([tupla])
+
+    response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
+        
+    return response
