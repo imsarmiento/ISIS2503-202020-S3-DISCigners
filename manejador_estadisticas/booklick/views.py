@@ -41,8 +41,60 @@ def get_booklists_carrera(request):
         writer.writerow(tupla)
     writer.writerow(['TOTAL', total])
 
-    response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
-        
+    response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
+
+    return response
+
+
+def get_booklists(request):
+
+    booklists = get_all_booklists()
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+
+    writer.writerow(['Carrera', 'NumBooklists'])
+
+    arreglo = []
+    frecuencua = []
+    diferentes = []
+    start = time.time()
+    booklists = booklists.values_list(
+        'titulo', 'creador', 'booklistsContenidos', 'contenidos')
+    # now = time.time()
+    # consulta = now-start
+
+    # start = time.time()
+    for booklist in booklists:
+        carrera = ''
+        for estudiante in Estudiante.objects.all():
+            if estudiante.get_codigo() == booklist[1]:
+                carrera = estudiante.get_carrera()
+
+        arreglo.append(carrera)
+    diferentes = list(Counter(arreglo).keys())
+    frecuencia = list(Counter(arreglo).values())
+
+    i = 0
+    lista = []
+    while i < len(diferentes):
+        actual = diferentes[i]+','+str(frecuencia[i])
+        lista.append(tuple(map(str, actual.split(','))))
+        i += 1
+    # nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
+    nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
+    now = time.time()
+    calculos = now-start
+
+    # print('Consulta: '+str(consulta))
+    # print('Calculos: '+str(calculos))
+
+    for tupla in nuevalista:
+        writer.writerow(tupla)
+#     writer.writerow([booklist[0]+','+carrera])
+#
+    response['Content-Disposition'] = 'attachment; filename="booklistsxarrera.csv"'
+#
     return response
 
 
@@ -70,7 +122,7 @@ def get_booklists_contenidoPromedio(request):
 #
     response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 #
-    #respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
+    # respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
 
     return response
 
@@ -132,8 +184,7 @@ def get_booklists_contenidoPromedio_db(request):
 
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_PROMEDIO)
     valores = get_valores_estadistica(estadistica.get('id'))
-    promedio = str(valores[0]).split()[1]
-
+    promedio = valores[0][1]
     writer.writerow([promedio])
     fecha = 'Estadística calculada en:' + estadistica.get('fecha')
     writer.writerow([fecha])

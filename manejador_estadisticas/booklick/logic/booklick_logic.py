@@ -6,7 +6,7 @@ from datetime import datetime
 
 def get_valores_estadistica(p_estadistica):
     valores = Valor.objects.filter(
-        estadistica=p_estadistica)
+        estadistica=p_estadistica).values_list('atributo', 'valor')
     print(valores)
     return valores
 
@@ -16,7 +16,7 @@ def get_estadistica_reciente(p_estadistica):
         '-fecha').values_list('id', 'fecha')
     estadistica = {'id': estadisticas[0][0],
                    'fecha': str(estadisticas[0][1])}
-    print(estadistica)
+    # print(estadistica)
     return estadistica
 
 def get_estudiantes_por_carrerra(p_carrera):
