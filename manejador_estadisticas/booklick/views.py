@@ -6,7 +6,7 @@ from django.core import serializers
 import csv
 import time
 
-from .logic.booklick_logic import get_valores_estadistica, get_estadistica_reciente,get_estudiantes_por_carrerra,get_carreras,get_booklists_estudiante
+from .logic.booklick_logic import get_valores_estadistica, get_estadistica_reciente, get_estudiantes_por_carrerra, get_carreras, get_booklists_estudiante
 
 from .logic.booklists_carrera import get_all_booklists
 from email._header_value_parser import ContentDisposition
@@ -16,17 +16,16 @@ from . models import Estadistica, Valor, Tipo_estadistica
 
 def get_booklists_carrera(request):
     carreras = get_carreras()
-    
+
     response = HttpResponse(content_type='text/csv')
-    
+
     writer = csv.writer(response)
-     
+
     writer.writerow(['Carrera', 'NumBooklists'])
 
-
-    booklistscarrera = [] 
+    booklistscarrera = []
     total = 0
-    
+
     for carrera in carreras:
         booklists = 0
         carrera_act = carrera['carrera']
@@ -34,9 +33,10 @@ def get_booklists_carrera(request):
         for estudiante in estudiantes:
             est_act = estudiante['codigo']
             booklists += get_booklists_estudiante(est_act)
-        booklistscarrera.append((carrera_act,booklists))
+        booklistscarrera.append((carrera_act, booklists))
         total += booklists
-    nuevalista=sorted(booklistscarrera,key=lambda x:int(x[1]),reverse=True)
+    nuevalista = sorted(
+        booklistscarrera, key=lambda x: int(x[1]), reverse=True)
     for tupla in nuevalista:
         writer.writerow(tupla)
     writer.writerow(['TOTAL', total])
@@ -133,7 +133,7 @@ def contar(request):
     booklists = get_all_booklists()
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
-    writer.writerow(['Contenido Booklists','0', '1-3', '5-10', 'Mas de 10'])
+    writer.writerow(['Contenido Booklists', '0', '1-3', '5-10', 'Mas de 10'])
     cero = 0
     unoatres = 0
     cincoadiez = 0
@@ -183,7 +183,9 @@ def get_booklists_contenidoPromedio_db(request):
     writer.writerow(['Promedio contenido Booklist:'])
 
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_PROMEDIO)
+    print(estadistica)
     valores = get_valores_estadistica(estadistica.get('id'))
+    print(valores)
     promedio = valores[0][1]
     writer.writerow([promedio])
     fecha = 'Estadística calculada en:' + estadistica.get('fecha')
@@ -191,6 +193,7 @@ def get_booklists_contenidoPromedio_db(request):
     response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 
     return response
+
 
 def post_booklists_rangos_db(request):
     booklists = get_all_booklists()
@@ -226,10 +229,11 @@ def post_booklists_rangos_db(request):
 def get_booklists_rangos_db(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
-    writer.writerow(['Contenido Booklists','0', '1-3', '5-10', 'Mas de 10'])
+    writer.writerow(['Contenido Booklists', '0', '1-3', '5-10', 'Mas de 10'])
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_RANGO)
+    print(estadistica)
     valores = get_valores_estadistica(estadistica.get('id'))
-    # print(valores)
+    print(valores)    # print(valores)
     cero = 0
     unoatres = 0
     cincoadiez = 0
@@ -244,18 +248,17 @@ def get_booklists_rangos_db(request):
             cincoadiez = valores[i][1]
         else:
             masdediez = valores[i][1]
-    writer.writerow(['Cantidad',cero, unoatres, cincoadiez, masdediez])
+    writer.writerow(['Cantidad', cero, unoatres, cincoadiez, masdediez])
     fecha = 'Estadística calculada en:' + estadistica.get('fecha')
     writer.writerow([fecha])
     response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
     return response
 
 
-
 def post_booklists_carrera_db(request):
-    
+
     carreras = get_carreras()
-    
+
     estadistica = Estadistica.objects.create(
         nombre=Tipo_estadistica.BOOKLIST_CARRERA)
 
@@ -266,26 +269,26 @@ def post_booklists_carrera_db(request):
         for estudiante in estudiantes:
             est_act = estudiante['codigo']
             booklists += get_booklists_estudiante(est_act)
-        
+
         valor = Valor.objects.create(
-        atributo=carrera_act, valor=booklists, estadistica=estadistica)
-        
+            atributo=carrera_act, valor=booklists, estadistica=estadistica)
+
     return HttpResponse('Exitoso')
 
 
 def get_booklists_carrera_db(request):
-    
+
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     writer.writerow(['Carrera', 'NumBooklists'])
 
     estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_CARRERA)
+    print(estadistica)
     valores = get_valores_estadistica(estadistica.get('id'))
-   
+    print(valores)
     for tupla in valores:
         writer.writerow(tupla)
 
-    response['Content-Disposition']= 'attachment; filename="booklistsCarrera.csv"'
-        
-    return response
+    response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
+    return response
