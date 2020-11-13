@@ -196,7 +196,6 @@ def post_booklists_contenidoPromedio_db(request):
 
 def get_booklists_contenidoPromedio_db(request):
     role = getRole(request)
-    print(role)
     if role == "Administrador Booklick":
         response = HttpResponse(content_type='text/csv')
         writer = csv.writer(response)
