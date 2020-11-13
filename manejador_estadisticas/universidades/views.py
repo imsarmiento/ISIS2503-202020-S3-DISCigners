@@ -58,7 +58,8 @@ def get_basesDatos(request, universidad, fechaInicio, fechaFin):
 
         return response
     else:
-        return HttpResponse("Unauthorized User")
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 """
@@ -134,4 +135,5 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
         print('Tot: '+str(tiempoTot))
         return response
     else:
-        return HttpResponse("Unauthorized User")
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')

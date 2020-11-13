@@ -192,6 +192,9 @@ def post_booklists_contenidoPromedio_db(request):
             atributo='promedio', valor=promedio, estadistica=estadistica)
 
         return HttpResponse('Exitoso')
+    else:
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_contenidoPromedio_db(request):
@@ -212,6 +215,9 @@ def get_booklists_contenidoPromedio_db(request):
         response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
 
         return response
+    else:
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 def post_booklists_rangos_db(request):
@@ -245,6 +251,9 @@ def post_booklists_rangos_db(request):
         valor = Valor.objects.create(
             atributo='Mas de 10', valor=masdediez, estadistica=estadistica)
         return HttpResponse('Exitoso')
+    else:
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_rangos_db(request):
@@ -277,7 +286,8 @@ def get_booklists_rangos_db(request):
         response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
         return response
     else:
-        return HttpResponse("Unauthorized User")
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 def post_booklists_carrera_db(request):
@@ -301,7 +311,8 @@ def post_booklists_carrera_db(request):
 
         return HttpResponse('Exitoso')
     else:
-        return HttpResponse("Unauthorized User")
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_carrera_db(request):
@@ -322,4 +333,5 @@ def get_booklists_carrera_db(request):
 
         return response
     else:
-        return HttpResponse("Unauthorized User")
+        #return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
