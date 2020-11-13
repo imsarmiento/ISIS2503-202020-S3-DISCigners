@@ -20,122 +20,122 @@ from . models import Estadistica, Valor, Tipo_estadistica
 def get_booklists_carrera(request):
     role = getRole(request)
     if role == "Administrador Booklick":
-   	 carreras = get_carreras()
+        carreras = get_carreras()
 
-   	 response = HttpResponse(content_type='text/csv')
+        response = HttpResponse(content_type='text/csv')
 
-	 writer = csv.writer(response)
+        writer = csv.writer(response)
 
-   	 writer.writerow(['Carrera', 'NumBooklists'])
+        writer.writerow(['Carrera', 'NumBooklists'])
 
-   	 booklistscarrera = []
-    	 total = 0
+        booklistscarrera = []
+        total = 0
 
-   	 for carrera in carreras:
-       		 booklists = 0
-       		 carrera_act = carrera['carrera']
-        	 estudiantes = get_estudiantes_por_carrerra(carrera_act)
-       		 for estudiante in estudiantes:
-            		est_act = estudiante['codigo']
-           		booklists += get_booklists_estudiante(est_act)
-       		 booklistscarrera.append((carrera_act, booklists))
-       		 total += booklists
-   		 nuevalista = sorted(
-        	 booklistscarrera, key=lambda x: int(x[1]), reverse=True)
-         for tupla in nuevalista:
-       		 writer.writerow(tupla)
-   		 writer.writerow(['TOTAL', total])
+        for carrera in carreras:
+            booklists = 0
+            carrera_act = carrera['carrera']
+            estudiantes = get_estudiantes_por_carrerra(carrera_act)
+            for estudiante in estudiantes:
+                est_act = estudiante['codigo']
+                booklists += get_booklists_estudiante(est_act)
+            booklistscarrera.append((carrera_act, booklists))
+            total += booklists
+        nuevalista = sorted(
+            booklistscarrera, key=lambda x: int(x[1]), reverse=True)
+        for tupla in nuevalista:
+            writer.writerow(tupla)
+        writer.writerow(['TOTAL', total])
 
-   	  response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
+        response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
-	  return response
-     else:
-	return HttpResponse("Unauthorized User")
+        return response
+    else:
+        return HttpResponse("Unauthorized User")
 
 @login_required
 def get_booklists(request):
     role = getRole(request)
     if role == "Administrador Booklick":
-   	 booklists = get_all_booklists()
-   	 response = HttpResponse(content_type='text/csv')
+        booklists = get_all_booklists()
+        response = HttpResponse(content_type='text/csv')
 
-   	 writer = csv.writer(response)
+        writer = csv.writer(response)
 
-   	 writer.writerow(['Carrera', 'NumBooklists'])
+        writer.writerow(['Carrera', 'NumBooklists'])
 
-   	 arreglo = []	
-   	 frecuencua = []
-   	 diferentes = []
-   	 start = time.time()
-   	 booklists = booklists.values_list(
-        	'titulo', 'creador', 'booklistsContenidos', 'contenidos')
-   	 # now = time.time()
-   	 # consulta = now-start
+        arreglo = []
+        frecuencua = []
+        diferentes = []
+        start = time.time()
+        booklists = booklists.values_list(
+            'titulo', 'creador', 'booklistsContenidos', 'contenidos')
+        # now = time.time()
+        # consulta = now-start
 
-   	 # start = time.time()
-   	 for booklist in booklists:
-       		 carrera = ''
-       		 for estudiante in Estudiante.objects.all():
-           		 if estudiante.get_codigo() == booklist[1]:
-               		 carrera = estudiante.get_carrera()
+        # start = time.time()
+        for booklist in booklists:
+            carrera = ''
+            for estudiante in Estudiante.objects.all():
+                if estudiante.get_codigo() == booklist[1]:
+                    carrera = estudiante.get_carrera()
 
-		 arreglo.append(carrera)
-   	diferentes = list(Counter(arreglo).keys())
+            arreglo.append(carrera)
+        diferentes = list(Counter(arreglo).keys())
         frecuencia = list(Counter(arreglo).values())
 
-	i = 0
-   	lista = []
-   	while i < len(diferentes):
-       		 actual = diferentes[i]+','+str(frecuencia[i])
-       		 lista.append(tuple(map(str, actual.split(','))))
-      		 i += 1
-   	 # nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
-   	 nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
-   	 now = time.time()
-	 calculos = now-start
+        i = 0
+        lista = []
+        while i < len(diferentes):
+            actual = diferentes[i] + ',' + str(frecuencia[i])
+            lista.append(tuple(map(str, actual.split(','))))
+            i += 1
+        # nuevalista=sorted(lista,key=lambda x:x[1],reverse=True)
+        nuevalista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
+        now = time.time()
+        calculos = now - start
 
-   	 # print('Consulta: '+str(consulta))
-   	 # print('Calculos: '+str(calculos))
+        # print('Consulta: '+str(consulta))
+        # print('Calculos: '+str(calculos))
 
-   	 for tupla in nuevalista:
-       		 writer.writerow(tupla)
-#    	 writer.writerow([booklist[0]+','+carrera])
-#
-   	 response['Content-Disposition'] = 'attachment; filename="booklistsxarrera.csv"'
-#
-   	 return response
+        for tupla in nuevalista:
+            writer.writerow(tupla)
+        #     writer.writerow([booklist[0]+','+carrera])
+        #
+        response['Content-Disposition'] = 'attachment; filename="booklistsxarrera.csv"'
+        #
+        return response
     else:
-	return HttpResponse("Unauthorized User")
+        return HttpResponse("Unauthorized User")
 
 @login_required
 def get_booklists_contenidoPromedio(request):
     role = getRole(request)
     if role == "Administrador Booklick"
-	 booklists = get_all_booklists()
-   	 response = HttpResponse(content_type='text/csv')
+        booklists = get_all_booklists()
+        response = HttpResponse(content_type='text/csv')
 
-   	 writer = csv.writer(response)
+        writer = csv.writer(response)
 
-   	 writer.writerow(['Promedio contenido Booklist:'])
+        writer.writerow(['Promedio contenido Booklist:'])
 
-   	 contador = 0
-   	 total = 0
-   	 num = 0
+        contador = 0
+        total = 0
+        num = 0
 
-   	 for booklist in booklists:
-       		 num = booklist.contenidos.all().count()+booklist.booklistsContenidos.all().count()
-       		 total = total + num
-       		 contador = contador + 1
+        for booklist in booklists:
+            num = booklist.contenidos.all().count() + booklist.booklistsContenidos.all().count()
+            total = total + num
+            contador = contador + 1
 
-   	 promedio = total/contador
+        promedio = total / contador
 
-         writer.writerow([promedio])
-#
-         response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
-#
-    # respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
+        writer.writerow([promedio])
+        #
+        response['Content-Disposition'] = 'attachment; filename="booklistsPromedioContenido.csv"'
+        #
+        # respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
 
-         return response
+        return response
     
     else:
         return HttpResponse("Unauthorized User")
