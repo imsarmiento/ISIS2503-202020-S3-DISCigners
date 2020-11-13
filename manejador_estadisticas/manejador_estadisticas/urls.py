@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('booklick/', include('booklick.urls')),
+    path('', include('booklick.urls')),
     path('universidades/', include('universidades.urls')),
     path('contenido/', include('manejador_contenido.urls')),
     path(r'',  include('django.contrib.auth.urls')),

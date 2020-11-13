@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from manejador_contenido.models import Booklist
 from manejador_usuarios.models import Estudiante
 from django.core import serializers
@@ -16,7 +17,7 @@ from email._header_value_parser import ContentDisposition
 from collections import Counter
 from . models import Estadistica, Valor, Tipo_estadistica
 
-def booklist(request):
+def booklick(request):
     return render(request, 'Booklick/booklick.html')
 
 @login_required
