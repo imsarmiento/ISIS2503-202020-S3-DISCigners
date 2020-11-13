@@ -311,5 +311,5 @@ def get_booklists_carrera_db(request):
             writer.writerow(tupla)
 
         response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
-    
+
         return response

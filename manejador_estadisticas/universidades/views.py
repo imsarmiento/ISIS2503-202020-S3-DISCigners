@@ -19,7 +19,7 @@ Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/2020-01-01/2021
 @login_required
 def get_basesDatos(request, universidad, fechaInicio, fechaFin):
     role = getRole(request)
-    if role == "Administrador Booklick":
+    if role == "Administrador Universidad":
         response = HttpResponse(content_type='text/csv')
 
         writer = csv.writer(response)
@@ -65,7 +65,7 @@ Ej. http://localhost:8000/universidades/basesDatos_carreras/Universidad%20de%20l
 def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
     startO = time.time()
     role = getRole(request)
-    if role == "Administrador Booklick":
+    if role == "Administrador Universidad":
         consulta = 0
         calculos = 0
         write = 0
