@@ -57,6 +57,8 @@ def get_basesDatos(request, universidad, fechaInicio, fechaFin):
         response['Content-Disposition'] = 'attachment; filename="DB_Consultadas.csv"'
 
         return response
+    else:
+        return HttpResponse("Unauthorized User")
 
 
 """
@@ -131,3 +133,5 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
         print('Write: '+str(write))
         print('Tot: '+str(tiempoTot))
         return response
+    else:
+        return HttpResponse("Unauthorized User")

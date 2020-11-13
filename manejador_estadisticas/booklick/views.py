@@ -276,6 +276,8 @@ def get_booklists_rangos_db(request):
         writer.writerow([fecha])
         response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
         return response
+    else:
+        return HttpResponse("Unauthorized User")
 
 
 def post_booklists_carrera_db(request):
@@ -298,6 +300,8 @@ def post_booklists_carrera_db(request):
                 atributo=carrera_act, valor=booklists, estadistica=estadistica)
 
         return HttpResponse('Exitoso')
+    else:
+        return HttpResponse("Unauthorized User")
 
 
 def get_booklists_carrera_db(request):
@@ -317,3 +321,5 @@ def get_booklists_carrera_db(request):
         response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
         return response
+    else:
+        return HttpResponse("Unauthorized User")
