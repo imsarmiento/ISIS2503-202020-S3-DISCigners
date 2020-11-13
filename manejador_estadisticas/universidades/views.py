@@ -16,6 +16,10 @@ Genera archivo con las bases de datos más consultadas (numConsultas)
 Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/2020-01-01/2021-10-10
 """
 
+def universidades(request):
+    return render(request, 'Universidades/universidades.html')
+
+
 @login_required
 def get_basesDatos(request, universidad, fechaInicio, fechaFin):
     role = getRole(request)
