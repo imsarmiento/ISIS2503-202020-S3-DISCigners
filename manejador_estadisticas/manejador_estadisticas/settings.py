@@ -166,7 +166,7 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.229.177.108:8000"
+LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F18.206.212.143:8000"
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 
 SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-leovap.us.auth0.com'
