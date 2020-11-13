@@ -176,5 +176,5 @@ SOCIAL_AUTH_AUTH0_SECRET = 'Vkong8k0sKcbGrilIdne5S1bEF2_SWMuKjmnqVTNFaoOmg21IjeC
 SOCIAL_AUTH_AUTH0_SCOPE = ['openid',
                            'profile'
                            ]
-AUTHENTICATION_BACKENDS = {'monitoring.auth0backend.Auth0', 'django.contrib.auth.backends.ModelBackend',
+AUTHENTICATION_BACKENDS = {'manejador_estadisticas.auth0backend.Auth0', 'django.contrib.auth.backends.ModelBackend',
                            }
