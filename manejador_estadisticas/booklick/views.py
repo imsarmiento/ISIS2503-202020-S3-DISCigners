@@ -17,7 +17,7 @@ from collections import Counter
 from . models import Estadistica, Valor, Tipo_estadistica
 
 def booklist(request):
-    return render(request, 'booklist.html')
+    return render(request, 'Booklick/booklick.html')
 
 @login_required
 def get_booklists_carrera(request):
