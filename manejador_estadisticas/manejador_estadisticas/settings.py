@@ -166,12 +166,12 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F54.147.137.158:8000"
+LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F54.198.169.22:8000"
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 
-SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-ivan-alfonso.auth0.com'
+SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-leovap.us.auth0.com'
 SOCIAL_AUTH_AUTH0_KEY = 'CHXN1UG4xJ1FyKOCn6QgOs8bs9HEFgnn'
-SOCIAL AUTH AUTH0 SECRET = 'Vkong8k0sKcbGrilIdne5S1bEF2_SWMuKjmnqVTNFaoOmg21IjeCUS-BCSgVoLSk'
+SOCIAL_AUTH_AUTH0_SECRET = 'Vkong8k0sKcbGrilIdne5S1bEF2_SWMuKjmnqVTNFaoOmg21IjeCUS-BCSgVoLSk'
 
 SOCIAL_AUTH_AUTH0_SCOPE = ['openid',
                            'profile'
