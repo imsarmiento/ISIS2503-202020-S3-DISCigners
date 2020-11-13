@@ -110,7 +110,7 @@ def get_booklists(request):
 @login_required
 def get_booklists_contenidoPromedio(request):
     role = getRole(request)
-    if role == "Administrador Booklick"
+    if role == "Administrador Booklick":
         booklists = get_all_booklists()
         response = HttpResponse(content_type='text/csv')
 
