@@ -16,6 +16,9 @@ from email._header_value_parser import ContentDisposition
 from collections import Counter
 from . models import Estadistica, Valor, Tipo_estadistica
 
+def booklist(request):
+    return render(request, 'booklist.html')
+
 @login_required
 def get_booklists_carrera(request):
     role = getRole(request)
