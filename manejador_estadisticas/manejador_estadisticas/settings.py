@@ -61,7 +61,7 @@ ROOT_URLCONF = 'manejador_estadisticas.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'manejador_estadisticas', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
