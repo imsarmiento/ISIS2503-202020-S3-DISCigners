@@ -6,6 +6,8 @@ class Tipo_estadistica(models.TextChoices):
     BOOKLIST_RANGO = 'BR', 'Booklist por rango'
     BOOKLIST_PROMEDIO = 'BP', 'Booklist promedio'
     BOOKLIST_CARRERA = 'BC', 'Booklist por carrera'
+    UNIVERSIDAD_PROVEEDORES_C = 'UC', 'Proveedores por carrera para una Universidad'
+    UNIVERSIDAD_PROVEEDORES_P = 'UP', 'Proveedores promedio para una Universidad'
 
 # Modelo de Proveedor
 
@@ -26,4 +28,14 @@ class Valor(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.atributo, self.valor)
+
+class ValorTipo2(models.Model):
+    atributo_carrera = models.CharField(max_length=100)
+    atributo_proveedor = models.CharField(max_length=100)
+    valor = models.FloatField()
+    estadistica = models.ForeignKey(Estadistica, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s %s' % (self.atributo, self.valor)
+
 # Modelo de Contenido
