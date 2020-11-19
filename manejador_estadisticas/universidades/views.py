@@ -18,33 +18,30 @@ Genera archivo con las bases de datos más consultadas (numConsultas)
 Ejemplo: http://localhost:8000/universidades/basesDatos/Uniandes/2020-01-01/2021-10-10
 """
 
+
 def universidades(request):
     return render(request, 'Universidades/universidades.html')
 
 
-#@login_required
+# @login_required
 def post_basesDatos(request, universidad, fechaInicio, fechaFin):
     print("Comienza")
     #role = getRole(request)
-    #if role == "Administrador Universidad":
+    # if role == "Administrador Universidad":
     estadistica = Estadistica.objects.create(
-            nombre=Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_P)
+        nombre=Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_P)
     print(estadistica)
     arreglo = []
     frecuencia = []
     diferentes = []
-    print("for")
     for consulta in get_consultas_universidad(universidad, fechaInicio, fechaFin).values_list('estudiante', 'contenido', 'fecha'):
         proveedor = ''
         for contenido in Contenido.objects.all():
             if contenido.get_Titulo() == consulta[1]:
                 proveedor = contenido.get_proveedor()
         arreglo.append(proveedor)
-    print("for_fin")
     diferentes = list(Counter(arreglo).keys())
     frecuencia = list(Counter(arreglo).values())
-    
-    print("org")
     i = 0
     lista = []
     while i < len(diferentes):
@@ -54,34 +51,36 @@ def post_basesDatos(request, universidad, fechaInicio, fechaFin):
     nuevaLista = sorted(lista, key=lambda x: int(x[1]), reverse=True)
     for tupla in nuevaLista:
         valor = Valor.objects.create(
-                atributo=tupla[0], valor=tupla[1], estadistica=estadistica)
-        print(valor)
+            atributo=tupla[0], valor=tupla[1], estadistica=estadistica)
     return HttpResponse('Exitoso')
 
-#@login_required    
+# @login_required
+
+
 def get_basesDatos(request, universidad, fechaInicio, fechaFin):
-    #role = getRole(request)
-    #if role == "Administrador Universidad":
-    response = HttpResponse(content_type='text/csv')
+    role = getRole(request)
+    if role == "Administrador Universidad":
+        response = HttpResponse(content_type='text/csv')
 
-    writer = csv.writer(response)
-    writer.writerow(['Universidad', universidad])
-    writer.writerow(['Fechas', fechaInicio + " / " + fechaFin])
-    writer.writerow(['Proveedor', 'NumeroConsultas'])
-    
-    estadistica = get_estadistica_reciente(Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_P)
-    print(estadistica)
-    valores = get_valores_estadistica(estadistica.get('id'))
-    print("valores",valores )
-    for tupla in valores:
-        writer.writerow(tupla)
+        writer = csv.writer(response)
+        writer.writerow(['Universidad', universidad])
+        writer.writerow(['Fechas', fechaInicio + " / " + fechaFin])
+        writer.writerow(['Proveedor', 'NumeroConsultas'])
 
-    response['Content-Disposition'] = 'attachment; filename="DB_Consultadas.csv"'
+        estadistica = get_estadistica_reciente(
+            Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_P)
+        print(estadistica)
+        valores = get_valores_estadistica(estadistica.get('id'))
+        print("valores", valores)
+        for tupla in valores:
+            writer.writerow(tupla)
 
-    return response
-    #else:
-        #return HttpResponse("Unauthorized User")
-        #return render(request, 'Universidades/unuser.html')
+        response['Content-Disposition'] = 'attachment; filename="DB_Consultadas.csv"'
+
+        return response
+    else:
+        return render(request, 'Universidades/unuser.html')
+
 
 def get_viejo_basesDatos(request, universidad, fechaInicio, fechaFin):
     role = getRole(request)
@@ -120,13 +119,8 @@ def get_viejo_basesDatos(request, universidad, fechaInicio, fechaFin):
 
         return response
     else:
-        #return HttpResponse("Unauthorized User")
+        # return HttpResponse("Unauthorized User")
         return render(request, 'Universidades/unuser.html')
-
-
-
-
-
 
 
 """
@@ -136,34 +130,36 @@ Ej. http://localhost:8000/universidades/basesDatos_carreras/Universidad%20de%20l
 """
 
 
-#@login_required
+# @login_required
 def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
     startO = time.time()
-    #role = getRole(request)
-    #if role == "Administrador Universidad":
-    consulta = 0
-    calculos = 0
-    write = 0
-    response = HttpResponse(content_type='text/csv')
+    role = getRole(request)
+    if role == "Administrador Universidad":
+        consulta = 0
+        calculos = 0
+        write = 0
+        response = HttpResponse(content_type='text/csv')
 
-    writer = csv.writer(response)
-    writer.writerow(['Universidad', universidad, " "])
-    writer.writerow(['Fechas', fechaInicio + " / " + fechaFin, " "])
+        writer = csv.writer(response)
+        writer.writerow(['Universidad', universidad, " "])
+        writer.writerow(['Fechas', fechaInicio + " / " + fechaFin, " "])
 
-    writer.writerow(['Carrera','Proveedor', 'NumeroConsultas'])
-    estadistica = get_estadistica_reciente(Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_C)
-    valores = get_valores_tipo2_estadistica(estadistica.get('id'))
-    for valor in valores:
-        writer.writerow(valor)
-    response['Content-Disposition'] = 'attachment; filename="DB_Consultadas_Por_Carrera.csv"'
-    return response
-    #else:
-        #return HttpResponse("Unauthorized User")
-    #    return render(request, 'Universidades/unuser.html')
+        writer.writerow(['Carrera', 'Proveedor', 'NumeroConsultas'])
+        estadistica = get_estadistica_reciente(
+            Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_C)
+        valores = get_valores_tipo2_estadistica(estadistica.get('id'))
+        for valor in valores:
+            writer.writerow(valor)
+        response['Content-Disposition'] = 'attachment; filename="DB_Consultadas_Por_Carrera.csv"'
+        return response
+    else:
+        # return HttpResponse("Unauthorized User")
+        return render(request, 'Universidades/unuser.html')
+
 
 def post_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
     #role = getRole(request)
-    #if role == "Administrador Universidad":
+    # if role == "Administrador Universidad":
     estadistica = Estadistica.objects.create(
         nombre=Tipo_estadistica.UNIVERSIDAD_PROVEEDORES_C)
     consulta = 0
@@ -189,11 +185,12 @@ def post_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
             lista_carrera.items(), key=lambda x: x[1], reverse=True)
         for proveedor in sort_proveedores:
             valorTipo2 = ValorTipo2.objects.create(
-            atributo_carrera=carrera, atributo_proveedor=proveedor[0], valor=proveedor[1], estadistica=estadistica)
+                atributo_carrera=carrera, atributo_proveedor=proveedor[0], valor=proveedor[1], estadistica=estadistica)
     return HttpResponse('Exitoso')
-    #else:
-        #return HttpResponse("Unauthorized User")
+    # else:
+    # return HttpResponse("Unauthorized User")
     #    return render(request, 'Universidades/unuser.html')
+
 
 def get_viejo_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
     if role == "Administrador Universidad":
@@ -254,5 +251,5 @@ def get_viejo_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
         print('Tot: '+str(tiempoTot))
         return response
     else:
-        #return HttpResponse("Unauthorized User")
+        # return HttpResponse("Unauthorized User")
         return render(request, 'Universidades/unuser.html')
