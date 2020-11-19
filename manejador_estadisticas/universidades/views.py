@@ -74,7 +74,8 @@ def get_basesDatos(request, universidad, fechaInicio, fechaFin):
         print("valores", valores)
         for tupla in valores:
             writer.writerow(tupla)
-
+        fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+        writer.writerow([fecha])
         response['Content-Disposition'] = 'attachment; filename="DB_Consultadas.csv"'
 
         return response
@@ -150,6 +151,8 @@ def get_basesDatos_carrera(request, universidad, fechaInicio, fechaFin):
         valores = get_valores_tipo2_estadistica(estadistica.get('id'))
         for valor in valores:
             writer.writerow(valor)
+        fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+        writer.writerow([fecha])
         response['Content-Disposition'] = 'attachment; filename="DB_Consultadas_Por_Carrera.csv"'
         return response
     else:

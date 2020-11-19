@@ -335,7 +335,9 @@ def get_booklists_carrera_db(request):
         print(valores)
         for tupla in valores:
             writer.writerow(tupla)
-
+            
+        fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+        writer.writerow([fecha])
         response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
         return response
