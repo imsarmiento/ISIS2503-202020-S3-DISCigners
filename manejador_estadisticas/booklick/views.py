@@ -17,8 +17,10 @@ from email._header_value_parser import ContentDisposition
 from collections import Counter
 from . models import Estadistica, Valor, Tipo_estadistica
 
+
 def booklick(request):
     return render(request, 'BooklickT/booklick.html')
+
 
 @login_required
 def get_booklists_carrera(request):
@@ -55,6 +57,7 @@ def get_booklists_carrera(request):
         return response
     else:
         return HttpResponse("Unauthorized User")
+
 
 @login_required
 def get_booklists(request):
@@ -111,6 +114,7 @@ def get_booklists(request):
     else:
         return HttpResponse("Unauthorized User")
 
+
 @login_required
 def get_booklists_contenidoPromedio(request):
     role = getRole(request)
@@ -140,7 +144,7 @@ def get_booklists_contenidoPromedio(request):
         # respuesta = "La cantidad promedio de contenido en los Booklist es: " + str(promedio)
 
         return response
-    
+
     else:
         return HttpResponse("Unauthorized User")
 
@@ -171,30 +175,30 @@ def contar(request):
 
 
 def post_booklists_contenidoPromedio_db(request):
-    role = getRole(request)
-    if role == "Administrador Booklick":
-        booklists = get_all_booklists()
-        response = HttpResponse(content_type='text/csv')
-        contador = 0
-        total = 0
-        num = 0
+    #role = getRole(request)
+    # if role == "Administrador Booklick":
+    booklists = get_all_booklists()
+    response = HttpResponse(content_type='text/csv')
+    contador = 0
+    total = 0
+    num = 0
 
-        for booklist in booklists:
-            num = booklist.contenidos.all().count()+booklist.booklistsContenidos.all().count()
-            total = total + num
-            contador = contador + 1
+    for booklist in booklists:
+        num = booklist.contenidos.all().count()+booklist.booklistsContenidos.all().count()
+        total = total + num
+        contador = contador + 1
 
-        promedio = total/contador
+    promedio = total/contador
 
-        estadistica = Estadistica.objects.create(
-            nombre=Tipo_estadistica.BOOKLIST_PROMEDIO)
-        valor = Valor.objects.create(
-            atributo='promedio', valor=promedio, estadistica=estadistica)
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_PROMEDIO)
+    valor = Valor.objects.create(
+        atributo='promedio', valor=promedio, estadistica=estadistica)
 
-        return HttpResponse('Exitoso')
-    else:
-        #return HttpResponse("Unauthorized User")
-        return render(request, 'Universidades/unuser.html')
+    return HttpResponse('Exitoso')
+    # else:
+    #    #return HttpResponse("Unauthorized User")
+    #    return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_contenidoPromedio_db(request):
@@ -204,7 +208,8 @@ def get_booklists_contenidoPromedio_db(request):
         writer = csv.writer(response)
         writer.writerow(['Promedio contenido Booklist:'])
 
-        estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_PROMEDIO)
+        estadistica = get_estadistica_reciente(
+            Tipo_estadistica.BOOKLIST_PROMEDIO)
         print(estadistica)
         valores = get_valores_estadistica(estadistica.get('id'))
         print(valores)
@@ -216,44 +221,44 @@ def get_booklists_contenidoPromedio_db(request):
 
         return response
     else:
-        #return HttpResponse("Unauthorized User")
+        # return HttpResponse("Unauthorized User")
         return render(request, 'Universidades/unuser.html')
 
 
 def post_booklists_rangos_db(request):
-    role = getRole(request)
-    if role == "Administrador Booklick":
-        booklists = get_all_booklists()
-        cero = 0
-        unoatres = 0
-        cincoadiez = 0
-        masdediez = 0
-        for booklist in booklists:
-            tamaño = booklist.contenidos.all().count(
-            ) + booklist.booklistsContenidos.all().count()
-            if tamaño == 0:
-                cero += 1
-            if 1 <= tamaño <= 3:
-                unoatres += 1
-            if 5 <= tamaño <= 10:
-                cincoadiez += 1
-            if tamaño > 10:
-                masdediez += 1
+    #role = getRole(request)
+    # if role == "Administrador Booklick":
+    booklists = get_all_booklists()
+    cero = 0
+    unoatres = 0
+    cincoadiez = 0
+    masdediez = 0
+    for booklist in booklists:
+        tamaño = booklist.contenidos.all().count(
+        ) + booklist.booklistsContenidos.all().count()
+        if tamaño == 0:
+            cero += 1
+        if 1 <= tamaño <= 3:
+            unoatres += 1
+        if 5 <= tamaño <= 10:
+            cincoadiez += 1
+        if tamaño > 10:
+            masdediez += 1
 
-        estadistica = Estadistica.objects.create(
-            nombre=Tipo_estadistica.BOOKLIST_RANGO)
-        valor = Valor.objects.create(
-            atributo='0', valor=cero, estadistica=estadistica)
-        valor = Valor.objects.create(
-            atributo='1-3', valor=unoatres, estadistica=estadistica)
-        valor = Valor.objects.create(
-            atributo='5-10', valor=cincoadiez, estadistica=estadistica)
-        valor = Valor.objects.create(
-            atributo='Mas de 10', valor=masdediez, estadistica=estadistica)
-        return HttpResponse('Exitoso')
-    else:
-        #return HttpResponse("Unauthorized User")
-        return render(request, 'Universidades/unuser.html')
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_RANGO)
+    valor = Valor.objects.create(
+        atributo='0', valor=cero, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='1-3', valor=unoatres, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='5-10', valor=cincoadiez, estadistica=estadistica)
+    valor = Valor.objects.create(
+        atributo='Mas de 10', valor=masdediez, estadistica=estadistica)
+    return HttpResponse('Exitoso')
+# else:
+    # return HttpResponse("Unauthorized User")
+    #    return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_rangos_db(request):
@@ -261,7 +266,8 @@ def get_booklists_rangos_db(request):
     if role == "Administrador Booklick":
         response = HttpResponse(content_type='text/csv')
         writer = csv.writer(response)
-        writer.writerow(['Contenido Booklists', '0', '1-3', '5-10', 'Mas de 10'])
+        writer.writerow(['Contenido Booklists', '0',
+                         '1-3', '5-10', 'Mas de 10'])
         estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_RANGO)
         print(estadistica)
         valores = get_valores_estadistica(estadistica.get('id'))
@@ -286,33 +292,33 @@ def get_booklists_rangos_db(request):
         response['Content-Disposition'] = 'attachment; filename="contenidoxbooklist.csv"'
         return response
     else:
-        #return HttpResponse("Unauthorized User")
+        # return HttpResponse("Unauthorized User")
         return render(request, 'Universidades/unuser.html')
 
 
 def post_booklists_carrera_db(request):
-    role = getRole(request)
-    if role == "Administrador Booklick":
-        carreras = get_carreras()
+    #role = getRole(request)
+    # if role == "Administrador Booklick":
+    carreras = get_carreras()
 
-        estadistica = Estadistica.objects.create(
-            nombre=Tipo_estadistica.BOOKLIST_CARRERA)
+    estadistica = Estadistica.objects.create(
+        nombre=Tipo_estadistica.BOOKLIST_CARRERA)
 
-        for carrera in carreras:
-            booklists = 0
-            carrera_act = carrera['carrera']
-            estudiantes = get_estudiantes_por_carrerra(carrera_act)
-            for estudiante in estudiantes:
-                est_act = estudiante['codigo']
-                booklists += get_booklists_estudiante(est_act)
+    for carrera in carreras:
+        booklists = 0
+        carrera_act = carrera['carrera']
+        estudiantes = get_estudiantes_por_carrerra(carrera_act)
+        for estudiante in estudiantes:
+            est_act = estudiante['codigo']
+            booklists += get_booklists_estudiante(est_act)
 
-            valor = Valor.objects.create(
-                atributo=carrera_act, valor=booklists, estadistica=estadistica)
+        valor = Valor.objects.create(
+            atributo=carrera_act, valor=booklists, estadistica=estadistica)
 
-        return HttpResponse('Exitoso')
-    else:
-        #return HttpResponse("Unauthorized User")
-        return render(request, 'Universidades/unuser.html')
+    return HttpResponse('Exitoso')
+    # else:
+    # return HttpResponse("Unauthorized User")
+    #    return render(request, 'Universidades/unuser.html')
 
 
 def get_booklists_carrera_db(request):
@@ -322,7 +328,8 @@ def get_booklists_carrera_db(request):
         writer = csv.writer(response)
         writer.writerow(['Carrera', 'NumBooklists'])
 
-        estadistica = get_estadistica_reciente(Tipo_estadistica.BOOKLIST_CARRERA)
+        estadistica = get_estadistica_reciente(
+            Tipo_estadistica.BOOKLIST_CARRERA)
         print(estadistica)
         valores = get_valores_estadistica(estadistica.get('id'))
         print(valores)
@@ -333,5 +340,5 @@ def get_booklists_carrera_db(request):
 
         return response
     else:
-        #return HttpResponse("Unauthorized User")
+        # return HttpResponse("Unauthorized User")
         return render(request, 'Universidades/unuser.html')
