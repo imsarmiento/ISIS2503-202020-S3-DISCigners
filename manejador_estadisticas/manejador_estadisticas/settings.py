@@ -25,7 +25,7 @@ SECRET_KEY = '#%ac%asfm!*xwnr9e7g9x(z03km2$8o6nmmv9nke@wnj8j)@j&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.24.41.73,', '*', ]
+ALLOWED_HOSTS = ['3.218.211.113', '*', ]
 
 
 # Application definition
@@ -165,6 +165,7 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
 
 STATICFILES_DIRS = (
@@ -173,7 +174,7 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.236.89.54:8000"
+LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F54.227.83.83:8000"
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-leovap.us.auth0.com'
