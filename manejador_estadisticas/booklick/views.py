@@ -24,39 +24,39 @@ def booklick(request):
 
 @login_required
 def get_booklists_carrera(request):
-    role = getRole(request)
-    if role == "Administrador Booklick":
-        carreras = get_carreras()
+    #role = getRole(request)
+    # if role == "Administrador Booklick":
+    carreras = get_carreras()
 
-        response = HttpResponse(content_type='text/csv')
+    response = HttpResponse(content_type='text/csv')
 
-        writer = csv.writer(response)
+    writer = csv.writer(response)
 
-        writer.writerow(['Carrera', 'NumBooklists'])
+    writer.writerow(['Carrera', 'NumBooklists'])
 
-        booklistscarrera = []
-        total = 0
+    booklistscarrera = []
+    total = 0
 
-        for carrera in carreras:
-            booklists = 0
-            carrera_act = carrera['carrera']
-            estudiantes = get_estudiantes_por_carrerra(carrera_act)
-            for estudiante in estudiantes:
-                est_act = estudiante['codigo']
-                booklists += get_booklists_estudiante(est_act)
-            booklistscarrera.append((carrera_act, booklists))
-            total += booklists
-        nuevalista = sorted(
-            booklistscarrera, key=lambda x: int(x[1]), reverse=True)
-        for tupla in nuevalista:
-            writer.writerow(tupla)
-        writer.writerow(['TOTAL', total])
+    for carrera in carreras:
+        booklists = 0
+        carrera_act = carrera['carrera']
+        estudiantes = get_estudiantes_por_carrerra(carrera_act)
+        for estudiante in estudiantes:
+            est_act = estudiante['codigo']
+            booklists += get_booklists_estudiante(est_act)
+        booklistscarrera.append((carrera_act, booklists))
+        total += booklists
+    nuevalista = sorted(
+        booklistscarrera, key=lambda x: int(x[1]), reverse=True)
+    for tupla in nuevalista:
+        writer.writerow(tupla)
+    writer.writerow(['TOTAL', total])
 
-        response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
+    response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
-        return response
-    else:
-        return HttpResponse("Unauthorized User")
+    return response
+    # else:
+    #    return HttpResponse("Unauthorized User")
 
 
 @login_required
@@ -335,7 +335,7 @@ def get_booklists_carrera_db(request):
         print(valores)
         for tupla in valores:
             writer.writerow(tupla)
-            
+
         fecha = 'Estadística calculada en:' + estadistica.get('fecha')
         writer.writerow([fecha])
         response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
