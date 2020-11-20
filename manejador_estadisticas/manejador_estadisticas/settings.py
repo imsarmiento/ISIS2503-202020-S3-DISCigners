@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'estadisticas-db2.cswghco9spvg.us-east-1.rds.amazonaws.com',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'estadisticasDB2',
         'USER': 'DISCigners',
         'PASSWORD': 'DISCigners2020',
-        'HOST': 'estadisticas-db.cswghco9spvg.us-east-1.rds.amazonaws.com',
+        'HOST': 'estadisticas-db2.cswghco9spvg.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     },
     # 'estadisticas': {
