@@ -322,25 +322,25 @@ def post_booklists_carrera_db(request):
 
 
 def get_booklists_carrera_db(request):
-    role = getRole(request)
-    if role == "Administrador Booklick":
-        response = HttpResponse(content_type='text/csv')
-        writer = csv.writer(response)
-        writer.writerow(['Carrera', 'NumBooklists'])
+    #role = getRole(request)
+    # if role == "Administrador Booklick":
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Carrera', 'NumBooklists'])
 
-        estadistica = get_estadistica_reciente(
-            Tipo_estadistica.BOOKLIST_CARRERA)
-        print(estadistica)
-        valores = get_valores_estadistica(estadistica.get('id'))
-        print(valores)
-        for tupla in valores:
-            writer.writerow(tupla)
+    estadistica = get_estadistica_reciente(
+        Tipo_estadistica.BOOKLIST_CARRERA)
+    print(estadistica)
+    valores = get_valores_estadistica(estadistica.get('id'))
+    print(valores)
+    for tupla in valores:
+        writer.writerow(tupla)
 
-        fecha = 'Estadística calculada en:' + estadistica.get('fecha')
-        writer.writerow([fecha])
-        response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
+    fecha = 'Estadística calculada en:' + estadistica.get('fecha')
+    writer.writerow([fecha])
+    response['Content-Disposition'] = 'attachment; filename="booklistsCarrera.csv"'
 
-        return response
-    else:
-        # return HttpResponse("Unauthorized User")
-        return render(request, 'Universidades/unuser.html')
+    return response
+    # else:
+    # return HttpResponse("Unauthorized User")
+    #    return render(request, 'Universidades/unuser.html')
