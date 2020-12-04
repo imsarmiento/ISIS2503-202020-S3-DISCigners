@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Estadísticas Booklick</h4>
+            <div style="text-align:right;">
+                <button type="button" class="btn btn-success waves-effect waves-light"
+                        onClick=" window.location.href='/booklistsPromedioContenido_db_get/' " style="text-align:center;">Contenido Promedio Booklists
+                </button>
+                <button type="button" class="btn btn-success waves-effect waves-light"
+                        onClick=" window.location.href='/booklistsCarrera_db_get/' " style="text-align:center;">Booklists por carrera
+                </button>
+                <button type="button" class="btn btn-success waves-effect waves-light"
+                        onClick=" window.location.href='/booklistsRango_db_get/' " style="text-align:center;">Booklists rango
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+{% endblock %}

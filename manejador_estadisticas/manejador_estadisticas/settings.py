@@ -25,7 +25,7 @@ SECRET_KEY = '#%ac%asfm!*xwnr9e7g9x(z03km2$8o6nmmv9nke@wnj8j)@j&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.24.41.73,', '*', ]
+ALLOWED_HOSTS = ['3.218.211.113', '*', ]
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'manejador_busquedas',
     'universidades',
     'booklick',
+    'social_django',
 
 ]
 
@@ -60,7 +61,7 @@ ROOT_URLCONF = 'manejador_estadisticas.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'manejador_estadisticas', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,10 +83,10 @@ WSGI_APPLICATION = 'manejador_estadisticas.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'estadisticasdb',
-        'USER': 'admin',
+        'NAME': 'estadisticasDB',
+        'USER': 'DISCigners',
         'PASSWORD': 'DISCigners2020',
-        'HOST': '172.24.42.72',
+        'HOST': 'estadisticas-db.cswghco9spvg.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     },
     # 'estadisticas': {
@@ -161,4 +162,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+LOGIN_URL = "/login/auth0"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "http://isis2503-leovap.us.auth0.com/v2/logout?returnTo=http%3A%2F%2Fbooklick.media"
+
+SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
+SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-leovap.us.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'CHXN1UG4xJ1FyKOCn6QgOs8bs9HEFgnn'
+SOCIAL_AUTH_AUTH0_SECRET = 'Vkong8k0sKcbGrilIdne5S1bEF2_SWMuKjmnqVTNFaoOmg21IjeCUS-BCSgVoLSk'
+
+SOCIAL_AUTH_AUTH0_SCOPE = ['openid',
+                           'profile'
+                           ]
+AUTHENTICATION_BACKENDS = {'manejador_estadisticas.auth0backend.Auth0', 'django.contrib.auth.backends.ModelBackend',
+                           }

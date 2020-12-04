@@ -18,4 +18,7 @@ urlpatterns = [
          name="booklistsRango_db_post"),
     path('booklistsRango_db_get/', views.get_booklists_rangos_db,
          name="booklistsRango_db_get"),
+    path('booklistsRango_db_get/', views.get_booklists_rangos_db,
+         name="booklistsRango_db_get"),
+    path('booklick/', views.booklick, name="booklistsGeneral"),
 ]
