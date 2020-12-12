@@ -1,0 +1,50 @@
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#monitor {
+  width: 50%;
+}
+
+#foot {
+  background-color: #d8d8d8;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100px;
+}
+
+#pd30 {
+  padding: 30px;
+}
+
+#left_40 {
+  float: left;
+  width: 400px;
+}
+
+#right_20 {
+  float: right;
+  width: 220px;
+}
+
+#minH580 {
+  min-height: 580px;
+}
+
+#textRight {
+  text-align: right;
+}
+
+#textCenter {
+  text-align: center;
+  margin: 3px;
+}
+
+#font_padding {
+  font-size: 120%;
+  padding-right: 20px;
+}
