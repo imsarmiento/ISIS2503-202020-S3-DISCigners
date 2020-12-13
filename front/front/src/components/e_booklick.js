@@ -5,7 +5,9 @@ import { useHistory } from "react-router-dom";
 function E_booklick(props) {
 
     const history = useHistory();
-    
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    // revisar mas info en https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
+
     const booklistsPromedioContenido = () => {
         history.push(`/booklick/booklistsPromedioContenido_db_get/`);
     };
@@ -18,9 +20,22 @@ function E_booklick(props) {
         history.push(`/booklick/booklistsRango_db_get/`);
     };
 
-    const prueba = () => {
+    const getUniversidades = async () => {
+        let objeto = undefined;
         try {
-            const res = await fetch("http://54.210.118.93:8000/usuarios");
+            const url = "http://54.210.118.93:8000/universidades"
+            const res = await fetch(proxyurl + url);
+            objeto = await res.json();
+            console.log(objeto)
+          } finally {
+            console.log("error")
+        }
+    }; 
+    const getEstudiantes = async () => {
+        let objeto = undefined;
+        try {
+            const url = "http://54.210.118.93:8000/estudiantes"
+            const res = await fetch(proxyurl + url);
             objeto = await res.json();
             console.log(objeto)
           } finally {
@@ -28,9 +43,11 @@ function E_booklick(props) {
         }
     };
 
-    const prueba2 = () => {
+    const getContenido = async () => {
+        let objeto = undefined;
         try {
-            const res = await fetch("http://54.210.118.93:8000/contenido");
+            const url = "http://54.210.118.93:8000/contenido"
+            const res = await fetch(proxyurl + url);
             objeto = await res.json();
             console.log(objeto)
           } finally {
@@ -54,10 +71,13 @@ function E_booklick(props) {
                         onClick={booklistsRango} id="textCenter">Booklists rango
                     </button>
                     <button type="button" className="btn btn-success waves-effect waves-light"
-                        onClick={prueba} id="textCenter">Prueba
+                        onClick={getUniversidades} id="textCenter"> GET universidades
                     </button>
                     <button type="button" className="btn btn-success waves-effect waves-light"
-                        onClick={prueba2} id="textCenter">Prueba2
+                        onClick={getEstudiantes} id="textCenter"> GET estudiantes
+                    </button>
+                    <button type="button" className="btn btn-success waves-effect waves-light"
+                        onClick={getContenido} id="textCenter">GET contenido
                     </button>
                 </div>
             </div>
