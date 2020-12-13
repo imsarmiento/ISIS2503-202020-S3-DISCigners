@@ -18,6 +18,26 @@ function E_booklick(props) {
         history.push(`/booklick/booklistsRango_db_get/`);
     };
 
+    const prueba = () => {
+        try {
+            const res = await fetch("http://54.210.118.93:8000/usuarios");
+            objeto = await res.json();
+            console.log(objeto)
+          } finally {
+            console.log("error")
+        }
+    };
+
+    const prueba2 = () => {
+        try {
+            const res = await fetch("http://54.210.118.93:8000/contenido");
+            objeto = await res.json();
+            console.log(objeto)
+          } finally {
+            console.log("error")
+        }
+    };
+
     return (
     <div className="content">
         <div className="">
@@ -32,6 +52,12 @@ function E_booklick(props) {
                     </button>
                     <button type="button" className="btn btn-success waves-effect waves-light"
                         onClick={booklistsRango} id="textCenter">Booklists rango
+                    </button>
+                    <button type="button" className="btn btn-success waves-effect waves-light"
+                        onClick={prueba} id="textCenter">Prueba
+                    </button>
+                    <button type="button" className="btn btn-success waves-effect waves-light"
+                        onClick={prueba2} id="textCenter">Prueba2
                     </button>
                 </div>
             </div>
