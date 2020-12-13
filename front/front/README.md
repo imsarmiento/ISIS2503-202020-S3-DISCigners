@@ -1,3 +1,21 @@
+# Run in AWS EC2 instance
+
+Follow this tutorial (https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
+
+What you have to do is run the following commands:
+
+1. curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+2. . ~/.nvm/nvm.sh
+3. nvm install node
+
+Check node version with:
+
+4. node -e "console.log('Running Node.js ' + process.version)"
+
+And you are set!
+
+To deploy, after beeing in the front/front directory do yarn start and check https:ip:3000
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
