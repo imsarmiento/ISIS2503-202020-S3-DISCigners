@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../static/media/logo.png'; 
-import AuthenticationButton from "./authentication-button";
+//import AuthenticationButton from "./authentication-button";
 
 
 function Navbar(props) {
@@ -26,7 +26,7 @@ function Navbar(props) {
                     <a className="nav-link" href="/universidades/">Estadísticas Universidad</a>
                 </li>
             </ul>
-            <AuthenticationButton />
+            {/*<AuthenticationButton />*/}
           </div>
         </nav>
     );
