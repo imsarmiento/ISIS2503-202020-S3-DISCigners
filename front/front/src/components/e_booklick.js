@@ -46,7 +46,19 @@ function E_booklick(props) {
     const getContenido = async () => {
         let objeto = undefined;
         try {
-            const url = "http://54.210.118.93:8000/contenido"
+            const url = "http://54.210.118.93:8000/contenidos"
+            const res = await fetch(proxyurl + url);
+            objeto = await res.json();
+            console.log(objeto)
+          } finally {
+            console.log("error")
+        }
+    };
+
+    const getConsultas = async () => {
+        let objeto = undefined;
+        try {
+            const url = "http://54.210.118.93:8000/consultas"
             const res = await fetch(proxyurl + url);
             objeto = await res.json();
             console.log(objeto)
@@ -78,6 +90,9 @@ function E_booklick(props) {
                     </button>
                     <button type="button" className="btn btn-success waves-effect waves-light"
                         onClick={getContenido} id="textCenter">GET contenido
+                    </button>
+                    <button type="button" className="btn btn-success waves-effect waves-light"
+                        onClick={getConsultas} id="textCenter">GET consultas
                     </button>
                 </div>
             </div>
